@@ -1,0 +1,1 @@
+GET http://localhost:3000/places?text=ac governador valadares, betim, 1000
