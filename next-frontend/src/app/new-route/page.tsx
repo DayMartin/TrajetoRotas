@@ -1,6 +1,8 @@
+import { MapNewRoute } from "./MapNewRoute";
 import { NewRouteForm } from "./NewRouteForm";
 
 export async function searchDirections(source: string, destination: string) {
+  console.log(source, destination);
   const [sourceResponse, destinationResponse] = await Promise.all([
     fetch(`http://localhost:3000/places?text=${source}`, {
       // cache: "force-cache", //default
@@ -17,11 +19,13 @@ export async function searchDirections(source: string, destination: string) {
   ]);
 
   if (!sourceResponse.ok) {
-    throw new Error("Failed to featch source data");
+    console.error(await sourceResponse.text());
+    throw new Error("Failed to fetch source data");
   }
 
   if (!destinationResponse.ok) {
-    throw new Error("Failed to featch destination data");
+    console.error(await destinationResponse.text());
+    throw new Error("Failed to fetch destination data");
   }
 
   const [sourceData, destinationData] = await Promise.all([
@@ -32,11 +36,18 @@ export async function searchDirections(source: string, destination: string) {
   const placeSourceId = sourceData.candidates[0].place_id;
   const placeDestinationId = destinationData.candidates[0].place_id;
 
-  const directionsResponse =
-    await fetch(`http://localhost:3000/directions?originId=${placeSourceId}&destinationId=${placeDestinationId}
-`);
+  const directionsResponse = await fetch(
+    `http://localhost:3000/directions?originId=${placeSourceId}&destinationId=${placeDestinationId}`,
+    {
+      // cache: "force-cache", //default
+      // next: {
+      //   revalidate: 1 * 60 * 60 * 24, // 1 dia
+      // },
+    }
+  );
 
-  if (!directionsResponse) {
+  if (!directionsResponse.ok) {
+    console.error(await directionsResponse.text());
     throw new Error("Failed to fetch directions");
   }
 
@@ -157,8 +168,9 @@ export async function NewRoutePage({
           </div>
         )}
       </div>
-      <div>mapa</div>
+      <MapNewRoute directionsData={directionsData} />
     </div>
   );
 }
+
 export default NewRoutePage;
