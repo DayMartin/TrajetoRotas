@@ -1,1 +1,37 @@
-GET http://localhost:3000/places?text=avenida doutor jose maria whitaker
+### Origin
+
+GET http://localhost:3000/places?text=rua marechal deodoro da fonseca, mairinque, são paulo
+
+### Destination
+
+GET http://localhost:3000/places?text=av doutor jose maria whitaker, 602, mairinque
+
+
+###
+
+@originId = ChIJj-sholMNz5QRv3hGZ2VoxSI
+
+@destinationId = ChIJlb1xkoptz5QRV0XudPef9uw
+###
+
+GET http://localhost:3000/directions?originId={{ originId }}&destinationId={{ destinationId }}
+
+###
+
+POST http://localhost:3000/routes
+Content-Type: application/json
+
+{
+    "name": "rota_1",
+    "source_id": "{{ originId }}",
+    "destination_id": "{{ destinationId }}"
+}
+
+###
+GET http://localhost:3000/routes
+Content-Type: application/json
+
+
+###
+GET http://localhost:3000/routes/675bbc33b375a33d06a6012c
+Content-Type: application/json

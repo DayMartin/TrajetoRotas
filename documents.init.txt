@@ -1,0 +1,10 @@
+docker-compose exec app bash
+npm run start:dev
+npx prisma generate
+
+///Força a instalação dos pacotes
+docker-compose up --build
+
+npm run start:dev -- --entryFile=repl
+
+lsof -i :3000
