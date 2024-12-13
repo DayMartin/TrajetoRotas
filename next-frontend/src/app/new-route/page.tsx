@@ -1,7 +1,19 @@
+import { NewRouteForm } from "./NewRouteForm";
+
 export async function searchDirections(source: string, destination: string) {
   const [sourceResponse, destinationResponse] = await Promise.all([
-    fetch(`http://localhost:3000/places?text=${source}`),
-    fetch(`http://localhost:3000/places?text=${destination}`),
+    fetch(`http://localhost:3000/places?text=${source}`, {
+      // cache: "force-cache", //default
+      // next: {
+      //   revalidate: 1 * 60 * 60 * 24, // 1 dia
+      // }
+    }),
+    fetch(`http://localhost:3000/places?text=${destination}`, {
+      // cache: "force-cache", //default
+      // next: {
+      //   revalidate: 1 * 60 * 60 * 24, // 1 dia
+      // }
+    }),
   ]);
 
   if (!sourceResponse.ok) {
@@ -84,7 +96,6 @@ export async function NewRoutePage({
               type="search"
               placeholder=""
               defaultValue={destination}
-
               className="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-contrast bg-default border-0 border-b-2 border-contrast appearance-none focus:outline-none focus:ring-0 focus:border-primary peer"
             />
             <label
@@ -121,6 +132,28 @@ export async function NewRoutePage({
                 {directionsData.routes[0].legs[0].duration.text}
               </li>
             </ul>
+            <NewRouteForm>
+              {placeSourceId && (
+                <input
+                  type="hidden"
+                  name="sourceId"
+                  defaultValue={placeSourceId}
+                />
+              )}
+              {placeDestinationId && (
+                <input
+                  type="hidden"
+                  name="destinationId"
+                  defaultValue={placeDestinationId}
+                />
+              )}
+              <button
+                type="submit"
+                className="bg-main text-primary font-bold p-2 rounded mt-4"
+              >
+                Adicionar rota
+              </button>
+            </NewRouteForm>
           </div>
         )}
       </div>
