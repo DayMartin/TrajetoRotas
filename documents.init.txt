@@ -8,3 +8,8 @@ docker-compose up --build
 npm run start:dev -- --entryFile=repl
 
 lsof -i :3000
+
+
+new-route
+driver
+admin
